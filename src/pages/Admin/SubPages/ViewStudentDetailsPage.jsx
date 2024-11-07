@@ -5,6 +5,8 @@ import DefaultLayout from "../../layout/DefaultLayout";
 import { BreadcrumbResponsive } from "../../../components/reuseable/Breadcrumbs";
 import { HasRole } from "../../../components/reuseable/HasRole";
 import { AuthContext } from "../../../components/context/AuthContext";
+import { ProfileLoadingIcon } from "../../../components/Icons";
+import loadingProfile from "../../../assets/images/profile-user.jpg";
 
 import EnrolledSubjects from "../../../components/EnrolledSubjects";
 
@@ -15,6 +17,7 @@ const ViewStudentDetailsPage = () => {
   const [error, setError] = useState(null);
 
   const [groupedEnrollments, setGroupedEnrollments] = useState([]);
+  
 
   useEffect(() => {
     // Fetch student data
@@ -114,6 +117,7 @@ const ViewStudentDetailsPage = () => {
       label: "Student Details",
     },
   ];
+  
 
   return (
     <DefaultLayout>
@@ -152,17 +156,40 @@ const ViewStudentDetailsPage = () => {
         {/* Main Content */}
         {!loading && !error && studentData && (
           <>
-            {/* Enrolled Subjects Section */}
-            {groupedEnrollments.length > 0 && (
-              <EnrolledSubjects groupedEnrollments={groupedEnrollments} />
-            )}
+            {/* Enrolled Subjects Section on the right */}
+            {/* <div className="md:w-1/2 pl-4">
+              {groupedEnrollments.length > 0 && (
+                <EnrolledSubjects groupedEnrollments={groupedEnrollments} />
+              )}
+            </div> */}
 
             {/* Personal Information */}
-            <div className="my-5 rounded-sm border border-stroke bg-white p-4 px-6 dark:border-strokedark dark:bg-boxdark">
-              <section className="mb-6">
-                <h2 className="mb-4 border-b pb-2 text-2xl font-semibold">
+            <div className="my-5 rounded-lg border border-stroke bg-white p-4 px-6 dark:border-strokedark dark:bg-boxdark">
+            <div className="flex flex-col md:flex-row">
+              {/* Left Column: Personal Information */}
+              <div className="rounded-lg bg-white p-6 shadow-md dark:bg-boxdark mt-8 md:w-1/2 pr-4">
+                <section className="mb-6">
+                  <h2 className="mb-4 border-b pb-2 text-2xl font-semibold">
                   Personal Information
                 </h2>
+               
+               {/* Profile Picture */}
+               <div className="flex items-center justify-center mb-6">
+                  <div
+                    className={` ${loading ? "grid place-content-center" : ""} h-[15em] w-[15em] rounded-full border bg-white dark:bg-boxdark`} // Increased size here
+                  >
+                    {loading ? (
+                      <ProfileLoadingIcon />
+                    ) : (
+                      <img
+                        src={loadingProfile}
+                        alt="Anonymous Profile"
+                        className="rounded-full h-full w-full object-cove " // Make the image fill the container
+                      />
+                    )}
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div>
                     <p className="text-gray-700">
@@ -638,27 +665,37 @@ const ViewStudentDetailsPage = () => {
               )}
             </div>
 
-            {/* Campus Information */}
-            <div className="mb-8 rounded-lg bg-white p-6 shadow-md">
-              <section>
-                <h2 className="mb-4 border-b pb-2 text-2xl font-semibold">
-                  Campus Information
-                </h2>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div>
-                    <p className="text-gray-700">
-                      <span className="font-medium">Campus Name:</span>{" "}
-                      {campusName}
-                    </p>
-                    <p className="text-gray-700">
-                      <span className="font-medium">Campus Address:</span>{" "}
-                      {campusAddress}
-                    </p>
+            {/* Right Column: Enrolled Subjects and Campus Information */}
+            <div className="md:w-1/2 pl-4">
+              {/* Enrolled Subjects Section */}
+              {groupedEnrollments.length > 0 && (
+                <EnrolledSubjects groupedEnrollments={groupedEnrollments} />
+              )}
+
+              {/* Campus Information */}
+              <div className="rounded-lg bg-white p-6 shadow-md dark:bg-boxdark mt-8">
+                <section>
+                  <h2 className="mb-4 border-b pb-2 text-2xl font-semibold">
+                    Campus Information
+                  </h2>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div>
+                      <p className="text-gray-700">
+                        <span className="font-medium">Campus Name:</span> {campusName}
+                      </p>
+                      <p className="text-gray-700">
+                        <span className="font-medium">Campus Address:</span>{" "}
+                        {campusAddress}
+                      </p>
+                    </div>
+                    {/* Add more campus-related details here if available */}
                   </div>
-                  {/* Add more campus-related details here if available */}
-                </div>
-              </section>
+                </section>
+              </div>
             </div>
+          </div>
+        </div>
+                
           </>
         )}
       </div>
